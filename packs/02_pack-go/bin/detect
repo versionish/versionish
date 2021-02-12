@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if test -f "go.mod" || #go modules
+   test -f "Gopkg.lock" || #dep
+   test -f "Godeps/Godeps.json" || # godeps
+   test -f "vendor/vendor.json" || # govendor
+   test -f "glide.yaml" || # glide
+   (test -d "src" && test -n "$(find "src" -mindepth 2 -type f -name '*.go' | sed 1q)") # gb
+then
+  echo Go
+else
+  exit 1
+fi

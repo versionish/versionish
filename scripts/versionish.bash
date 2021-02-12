@@ -51,6 +51,12 @@ call_detect() {
     exit 10
   fi
 
+  if [[ ! -d $app_dir ]]; then
+    echoerr "app_dir does not exist or is inaccessible"
+    exit 2
+  fi
+  pushd $app_dir >> ${versionish_log}
+
   local script_output=
   declare -a dirlist
   mapfile -t dirlist < <(find $packs_dir -maxdepth 1 -mindepth 1 -type d -printf '%p\n')
@@ -65,10 +71,13 @@ call_detect() {
       local pack_dir=$(basename $dir)
       echo "Version pack '$pack_dir' detected, version information used out of: >$script_output<" >> ${versionish_log}
       echo '{ "pack_dirname" : "'$pack_dir'", "file" : "'$app_dir/$script_output'" }'
+
+      popd >> ${versionish_log}
       return 0
     fi
   done
 
+  popd >> ${versionish_log}
   echoerr "No compatible version pack found."
   exit 1
 }
@@ -160,8 +169,12 @@ run_main() {
   local log_prefix="-->"
 
   # switch to app_dir for user convenience
+  if [[ ! -d $app_dir ]]; then
+    echoerr "app_dir does not exist or is inaccessible"
+    exit 2
+  fi
   echo "$log_prefix Change directory to: $app_dir" >> ${versionish_log}
-  cd $app_dir
+  pushd $app_dir > /dev/null
 
   local result_json=$(detect_package_manager $packs_dir $app_dir)
   echo "$log_prefix Using version pack: $result_json" >> ${versionish_log}
@@ -183,6 +196,9 @@ run_main() {
   echo "$log_prefix converted to semantic version number: $semver" >> ${versionish_log}
 
   echo $semver
+
+  popd > /dev/null
+
   return 0
 }
 

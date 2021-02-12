@@ -13,10 +13,11 @@ setup() {
   pack_under_test="$packs_dir/05_pack-maven"
   versionish="${versionish_dir}/versionish.bash"
   source ${versionish}
-  versionish_log="$BATS_TEST_DIRNAME/versionish.log"
   pm_maven="$BATS_TEST_DIRNAME/package_managers/maven"
-  pm_leiningen="$BATS_TEST_DIRNAME/package_managers/leiningen"
   echo -e "\n\n$BATS_TEST_NAME" 2>&1 >> ${versionish_log}
+
+  # change to working copy
+  cd $pm_maven
 }
 
 @test "call_detect: no version pack found" {
@@ -30,8 +31,8 @@ setup() {
 @test "call_detect: app_dir does not exist" {
   run call_detect $packs_dir /not/exist
 
-  assert_failure 1
-  assert_output "No compatible version pack found."
+  assert_failure 2
+  assert_output "app_dir does not exist or is inaccessible"
 }
 
 @test "call_detect: a maven version pack found" {
@@ -122,8 +123,8 @@ setup() {
 @test "detect_package_manager: app_dir set to unknown directory" {
   run detect_package_manager "$packs_dir" "/not/exist"
 
-  assert_failure 1
-  assert_output "No compatible version pack found."
+  assert_failure 2
+  assert_output "app_dir does not exist or is inaccessible"
 }
 
 @test "detect_package_manager: detect a java application using maven pom.xml" {
@@ -181,7 +182,7 @@ setup() {
   run convert_version_number "$pack_under_test" "01.2020"
 
   assert_failure 1
-  assert_output "'convert' returns with error 2: no semantic version used, aborting"
+  assert_output "'convert' returns with error 2: '01.2020' is not a valid semantic version, aborting"
 }
 
 #@test "read_config_json: read configuration for Java buildpack" {

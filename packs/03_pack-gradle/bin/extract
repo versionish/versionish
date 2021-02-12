@@ -3,8 +3,8 @@
 # exporting JAVA_HOME to suppress a stupid warning message on stdout
 export JAVA_HOME=/usr
 
-maven_wrapper() {
-  ./mvnw org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout
+gradle_wrapper() {
+  ./gradlew -q printVersion
   local return_code=$?
   if [[ $return_code -ne 0 ]]; then
     exit 1
@@ -16,5 +16,5 @@ if [[ ${1+x} == "" ]]; then
   exit 1
 fi
 
-maven_wrapper $1
+gradle_wrapper $1
 exit 0

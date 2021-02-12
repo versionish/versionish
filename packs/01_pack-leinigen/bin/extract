@@ -4,9 +4,6 @@
 export JAVA_HOME=/usr
 
 get_version() {
-  local working_dir=$(dirname $1)
-  pushd $working_dir > /dev/null
-
   # download lein
   wget "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein" > /dev/null
   chmod +x lein
@@ -20,8 +17,6 @@ get_version() {
   if [[ $return_code -ne 0 ]]; then
     exit 1
   fi
-
-  popd > /dev/null
 }
 
 if [[ ${1+x} == "" ]]; then

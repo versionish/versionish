@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ -f build.gradle ]; then
+  echo "build.gradle"
+  exit 0
+else
+  (>&2 echo "Could not find a 'gradlew' script or a 'build.gradle' file! Please check that they exist and are commited to Git.")
+  exit 1
+fi
