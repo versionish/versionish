@@ -13,11 +13,11 @@ setup() {
   pack_under_test="$packs_dir/05_pack-maven"
   versionish="${versionish_dir}/versionish.bash"
   source ${versionish}
-  pm_maven="$BATS_TEST_DIRNAME/package_managers/maven"
-  echo -e "\n\n$BATS_TEST_NAME" 2>&1 >> ${versionish_log}
 
-  # change to working copy
-  cd $pm_maven
+  pm_maven="$BATS_TEST_DIRNAME/package_managers/maven"
+
+  versionish_log="$BATS_TEST_DIRNAME/versionish.log"
+  echo -e "\n\n$BATS_TEST_NAME" 2>&1 >> ${versionish_log}
 }
 
 @test "call_detect: no version pack found" {

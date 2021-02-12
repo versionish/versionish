@@ -10,10 +10,12 @@ setup_file() {
 setup() {
   versionish_dir="/tmp/versionish"
   packs_dir="$versionish_dir/packs"
-  pack_under_test="$packs_dir/05_pack-maven"
   versionish="${versionish_dir}/versionish.bash"
   source ${versionish}
+
   pm_dir="$BATS_TEST_DIRNAME/package_managers"
+
+  versionish_log="$BATS_TEST_DIRNAME/versionish-main.log"
   echo -e "\n\n$BATS_TEST_NAME" 2>&1 >> ${versionish_log}
 }
 
