@@ -1,0 +1,15 @@
+{
+  "name": "docker-bats",
+  "version": "1.0.0",
+  "description": "This file is use for dependency management only and will never be used on any production docker image",
+  "private": "true",
+  "author": "Andreas Felder <ajdergute@gmail.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "bats": "^v1.2.1",
+    "bats-support": "git+https://github.com/bats-core/bats-support.git#v0.3.0",
+    "bats-assert": "git+https://github.com/bats-core/bats-assert.git#v2.0.0",
+    "bats-file": "git+https://github.com/bats-core/bats-file.git#v0.3.0",
+    "bats-mock": "git+https://github.com/jasonkarns/bats-mock.git#v1.0.1"
+  }
+}

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+convert_version() {
+  local version="$1"
+
+  if [[ "$version" == *.*.*-SNAPSHOT ]]; then
+    echo $version | cut -d'-' -f 1
+    exit 0
+  elif [[ "$version" != *.*.* ]]; then
+    echo "'$version' is not a valid semantic version, aborting"
+    exit 2
+  else
+    echo $version
+    exit 0
+  fi
+}
+
+if [[ ${1+x} == "" ]]; then
+  echo "version number missing"
+  exit 1
+fi
+
+convert_version $1
+exit 1

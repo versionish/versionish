@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# exporting JAVA_HOME to suppress a stupid warning message on stdout
+export JAVA_HOME=/usr
+
+get_version() {
+  local working_dir=$(dirname $1)
+  pushd $working_dir > /dev/null
+
+  # download lein
+  wget "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein" > /dev/null
+  chmod +x lein
+
+  # create pom.xml for easier version extraction logic
+  ./lein pom
+
+  ./mvnw org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout
+  local return_code=$?
+
+  if [[ $return_code -ne 0 ]]; then
+    exit 1
+  fi
+
+  popd > /dev/null
+}
+
+if [[ ${1+x} == "" ]]; then
+  echo "version file name was not be given"
+  exit 1
+fi
+
+get_version $1
+exit 0

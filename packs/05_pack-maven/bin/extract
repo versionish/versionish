@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# exporting JAVA_HOME to suppress a stupid warning message on stdout
+export JAVA_HOME=/usr
+
+maven_wrapper() {
+  local working_dir=$(dirname $1)
+  pushd $working_dir > /dev/null
+  ./mvnw org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout
+  local return_code=$?
+  if [[ $return_code -ne 0 ]]; then
+    exit 1
+  fi
+  popd > /dev/null
+}
+
+if [[ ${1+x} == "" ]]; then
+  echo "version file name was not be given"
+  exit 1
+fi
+
+maven_wrapper $1
+exit 0

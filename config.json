@@ -1,0 +1,18 @@
+{
+  "tools": [
+    {
+      "buildpack": "Java",
+      "input": {
+        "type": "mvn",
+        "command": "./mvnw org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout"
+      },
+      "processing": {
+        "versionType": "semVer",
+        "type": "regex",
+        "versionPattern": "",
+        "shortVersionPattern": ""
+      },
+      "": ""
+    }
+  ]
+}

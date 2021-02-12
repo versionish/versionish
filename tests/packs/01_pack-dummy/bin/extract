@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# exporting JAVA_HOME to suppress a stupid warning message on stdout
+export JAVA_HOME=/usr
+
+if [[ ${1+x} == "" ]]; then
+  echo "version file name was not be given"
+  exit 1
+fi
+
+echo "0.0.1-SNAPSHOT"
+exit 0

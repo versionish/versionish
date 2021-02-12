@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# change to working copy
+pushd $1 > /dev/null
+
+# Searching for various file endings to support maven polyglot: https://github.com/takari/polyglot-maven
+if [[ -f pom.xml ]]; then
+  echo "pom.xml"
+  popd > /dev/null
+  exit 0
+elif [[ -f pom.atom ]]; then
+  echo "pom.atom"
+  popd > /dev/null
+  exit 0
+elif [[ -f pom.clj ]]; then
+  echo "pom.clj"
+  popd > /dev/null
+  exit 0
+elif [[ -f pom.groovy ]]; then
+  echo "pom.groovy"
+  popd > /dev/null
+  exit 0
+elif [[ -f pom.rb ]]; then
+  echo "pom.rb"
+  popd > /dev/null
+  exit 0
+elif [[ -f pom.scala ]]; then
+  echo "pom.scala"
+  popd > /dev/null
+  exit 0
+elif [[ -f pom.yaml ]]; then
+  echo "pom.yaml"
+  popd > /dev/null
+  exit 0
+elif [[ -f pom.yml ]]; then
+  echo "pom.yml"
+  popd > /dev/null
+  exit 0
+else
+  (>&2 echo "Could not find a pom.xml file! Please check that it exists and is committed to Git.")
+  popd > /dev/null
+  exit 1
+fi
