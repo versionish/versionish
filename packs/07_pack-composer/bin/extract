@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+
+get_composer_version() {
+  local composer_json=$1
+
+  local version=
+  version=$(cat $composer_json | jq -r 'select(.version != null) | .version')
+  local return_code=$?
+  if [[ $return_code -ne 0 ]]; then
+    exit 1
+  fi
+
+  if [[ "$version" == "" ]]; then
+    (echo >&2 "no version number specified in composer.json")
+    exit 1
+  fi
+
+  echo $version
+}
+
+if [[ ${1+x} == "" ]]; then
+  echo "version file name was not be given"
+  exit 1
+fi
+
+get_composer_version $1
+exit 0

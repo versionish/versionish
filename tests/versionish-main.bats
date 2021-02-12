@@ -50,3 +50,10 @@ setup() {
   assert_success
   assert_output "1.0.1"
 }
+
+@test "run_main: run versionish functional test on composer" {
+  run run_main "$pm_dir/composer"
+
+  assert_success
+  assert_output "2.0.4-p1"
+}

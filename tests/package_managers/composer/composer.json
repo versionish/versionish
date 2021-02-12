@@ -1,0 +1,41 @@
+{
+    "name": "typo3/minimal",
+    "type": "metapackage",
+    "description": "Minimal required set of TYPO3 extensions",
+    "license": "GPL-2.0-or-later",
+    "version": "v2.0.4-p1",
+    "authors": [
+        {
+            "name": "TYPO3 CMS Core Team",
+            "role": "Developer",
+            "homepage": "https://forge.typo3.org/projects/typo3cms-core"
+        },
+        {
+            "name": "The TYPO3 Community",
+            "role": "Contributor",
+            "homepage": "https://typo3.org/community/"
+        }
+    ],
+    "support": {
+        "general": "https://typo3.org/support/",
+        "issues": "https://forge.typo3.org",
+        "irc": "irc://irc.freenode.net/#typo3-cms",
+        "news": "nntp://lists.typo3.org"
+    },
+    "require": {
+        "typo3/cms-backend": "11.1.*@dev",
+        "typo3/cms-core": "11.1.*@dev",
+        "typo3/cms-extbase": "11.1.*@dev",
+        "typo3/cms-extensionmanager": "11.1.*@dev",
+        "typo3/cms-filelist": "11.1.*@dev",
+        "typo3/cms-fluid": "11.1.*@dev",
+        "typo3/cms-frontend": "11.1.*@dev",
+        "typo3/cms-install": "11.1.*@dev",
+        "typo3/cms-recordlist": "11.1.*@dev"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "11.1.x-dev"
+        }
+    }
+}
