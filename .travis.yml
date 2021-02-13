@@ -32,17 +32,17 @@ script:
     ./shellcheck.sh
     exit $?
   fi
-  if [[ "${TRAVIS_OS_NAME:-}" == 'linux' && -n "${BASHVER}" ]]; then
+  # if [[ "${TRAVIS_OS_NAME:-}" == 'linux' && -n "${BASHVER}" ]]; then
     # docker build --build-arg bashver="${BASHVER}" --tag "bats/bats:bash-${BASHVER}" . || exit $?
     # docker run -it "bash:${BASHVER}" --version || exit $?
     # time docker run -it "bats/bats:bash-${BASHVER}" --tap /opt/bats/test || exit $?
     # also test running (recursively!) in parallel
     # time docker run -it -e BATS_NUMBER_OF_PARALLEL_JOBS=2 "bats/bats:bash-${BASHVER}" --tap /opt/bats/test || exit $?
-  else
+  # else
     # time bin/bats --formatter tap test
     # allow for some parallelity without GNU parallel, e.g. on MacOS
     # time BATS_NO_PARALLELIZE_ACROSS_FILES=1 BATS_NUMBER_OF_PARALLEL_JOBS=2 bin/bats --tap test
-  fi
+  # fi
       
 notifications:
   email:
