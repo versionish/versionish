@@ -29,7 +29,7 @@ before_script:
 script:
 - |
   if [[ "${TRAVIS_OS_NAME:-}" == 'linux' && "$SHELLCHECK" == 'true' ]]; then
-    sh shellcheck.sh
+    bash shellcheck.sh
     exit $?
   fi
   # if [[ "${TRAVIS_OS_NAME:-}" == 'linux' && -n "${BASHVER}" ]]; then
