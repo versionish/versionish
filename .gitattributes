@@ -3,3 +3,4 @@
 *.bats eol=lf
 scripts/* eol=lf
 packs/* eol=lf
+docs/* linguist-documentation
