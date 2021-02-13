@@ -4,3 +4,4 @@
 scripts/* eol=lf
 packs/* eol=lf
 docs/* linguist-documentation
+tests/package_managers/* -linguist-detectable
