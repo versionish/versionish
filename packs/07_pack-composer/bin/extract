@@ -5,7 +5,7 @@ get_composer_version() {
   local composer_json=$1
 
   local version=
-  version=$(cat "$composer_json" | jq -r 'select(.version != null) | .version')
+  version=$(jq -r 'select(.version != null) | .version' "$composer_json")
   local return_code=$?
   if [[ $return_code -ne 0 ]]; then
     exit 1
