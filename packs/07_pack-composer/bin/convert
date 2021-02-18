@@ -12,7 +12,7 @@ convert_version() {
   fi
 }
 
-if [[ ${1+x} == "" ]]; then
+if [[ "$1" == "" ]]; then
   echo "version number missing"
   exit 1
 fi

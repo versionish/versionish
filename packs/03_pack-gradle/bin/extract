@@ -11,7 +11,7 @@ gradle_wrapper() {
   fi
 }
 
-if [[ ${1+x} == "" ]]; then
+if [[ "$1" == "" ]]; then
   echo "version file name was not be given"
   exit 1
 fi

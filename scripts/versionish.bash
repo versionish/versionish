@@ -54,6 +54,7 @@ call_detect() {
     echoerr "app_dir does not exist or is inaccessible"
     exit 2
   fi
+
   pushd "$app_dir" >> ${versionish_log}
 
   local script_output
@@ -73,11 +74,13 @@ call_detect() {
       echo "{ \"pack_dirname\" : \"$pack_dir\", \"file\" : \"$app_dir/$script_output\" }"
 
       popd >> ${versionish_log}
+
       return 0
     fi
   done
 
   popd >> ${versionish_log}
+
   echoerr "No compatible version pack found."
   exit 1
 }
@@ -97,6 +100,7 @@ call_pack_script() {
     echoerr "$pack_dir/bin/$script_name does not exist"
     exit 10
   fi
+
   local script_output
   script_output=$("$pack_dir/bin/$script_name" "$script_args" 2>&1 | tail -n 1)
   local return_code=$?
@@ -104,6 +108,7 @@ call_pack_script() {
     echo "Script '$script_name' output was: >$script_output<" >> ${versionish_log}
 
     echo "$script_output"
+
     return 0
   fi
 
