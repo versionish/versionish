@@ -5,7 +5,7 @@ get_composer_version() {
   local composer_json=$1
 
   local version=
-  version=$(cat $composer_json | jq -r 'select(.version != null) | .version')
+  version=$(jq -r 'select(.version != null) | .version' "$composer_json")
   local return_code=$?
   if [[ $return_code -ne 0 ]]; then
     exit 1
@@ -16,13 +16,13 @@ get_composer_version() {
     exit 1
   fi
 
-  echo $version
+  echo "$version"
 }
 
-if [[ ${1+x} == "" ]]; then
+if [[ "$1" == "" ]]; then
   echo "version file name was not be given"
   exit 1
 fi
 
-get_composer_version $1
+get_composer_version "$1"
 exit 0

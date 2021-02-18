@@ -33,8 +33,6 @@ echoerr() {
   printf "%s\n" "$*" >&2;
 }
 
-buildpack_used=
-buildpack_output=
 versionish_log=/tmp/versionish.log
 
 call_detect() {
@@ -46,7 +44,8 @@ call_detect() {
     exit 2
   fi
 
-  local packs_dir_list=$(find $packs_dir -maxdepth 1 -mindepth 1 -type d -printf '%p, ')
+  local packs_dir_list
+  packs_dir_list=$(find "$packs_dir" -maxdepth 1 -mindepth 1 -type d -printf '%p, ')
   if [ "$packs_dir_list" == "" ]; then
     exit 10
   fi
@@ -55,29 +54,33 @@ call_detect() {
     echoerr "app_dir does not exist or is inaccessible"
     exit 2
   fi
-  pushd $app_dir >> ${versionish_log}
 
-  local script_output=
+  pushd "$app_dir" >> ${versionish_log}
+
+  local script_output
   declare -a dirlist
-  mapfile -t dirlist < <(find $packs_dir -maxdepth 1 -mindepth 1 -type d -printf '%p\n')
-  echo $packs_dir_list >> ${versionish_log}
-  for dir in ${dirlist[@]}; do
+  mapfile -t dirlist < <(find "$packs_dir" -maxdepth 1 -mindepth 1 -type d -printf '%p\n')
+  echo "$packs_dir_list" >> ${versionish_log}
+  for dir in "${dirlist[@]}"; do
     echo "$dir/bin/detect $app_dir" >> ${versionish_log}
-    script_output=$($dir/bin/detect $app_dir 2>&1 | tail -n 1)
+    script_output=$("$dir/bin/detect" "$app_dir" 2>&1 | tail -n 1)
     local return_code=$?
 
-    echo $script_output >> ${versionish_log}
+    echo "$script_output" >> ${versionish_log}
     if [[ "$return_code" == "0" ]]; then
-      local pack_dir=$(basename $dir)
+      local pack_dir
+      pack_dir=$(basename "$dir")
       echo "Version pack '$pack_dir' detected, version information used out of: >$script_output<" >> ${versionish_log}
-      echo '{ "pack_dirname" : "'$pack_dir'", "file" : "'$app_dir/$script_output'" }'
+      echo "{ \"pack_dirname\" : \"$pack_dir\", \"file\" : \"$app_dir/$script_output\" }"
 
       popd >> ${versionish_log}
+
       return 0
     fi
   done
 
   popd >> ${versionish_log}
+
   echoerr "No compatible version pack found."
   exit 1
 }
@@ -97,13 +100,15 @@ call_pack_script() {
     echoerr "$pack_dir/bin/$script_name does not exist"
     exit 10
   fi
+
   local script_output
-  script_output=$($pack_dir/bin/$script_name $script_args 2>&1 | tail -n 1)
+  script_output=$("$pack_dir/bin/$script_name" "$script_args" 2>&1 | tail -n 1)
   local return_code=$?
   if [[ "$return_code" == "0" ]]; then
     echo "Script '$script_name' output was: >$script_output<" >> ${versionish_log}
 
-    echo $script_output
+    echo "$script_output"
+
     return 0
   fi
 
@@ -122,7 +127,7 @@ detect_package_manager() {
   script_output=$(call_detect "$packs_dir" "$app_dir")
   local return_code=$?
 
-  echo $script_output
+  echo "$script_output"
   return $return_code
 }
 
@@ -135,7 +140,7 @@ extract_version_number() {
   version_number=$(call_pack_script "$pack_dir" "extract" "$file")
   local return_code=$?
 
-  echo $version_number
+  echo "$version_number"
   return $return_code
 }
 
@@ -148,7 +153,7 @@ convert_version_number() {
   semver=$(call_pack_script "$pack_dir" "convert" "$raw_version_number")
   local return_code=$?
 
-  echo $semver
+  echo "$semver"
   return $return_code
 }
 
@@ -174,13 +179,16 @@ run_main() {
     exit 2
   fi
   echo "$log_prefix Change directory to: $app_dir" >> ${versionish_log}
-  pushd $app_dir > /dev/null
+  pushd "$app_dir" > /dev/null
 
-  local result_json=$(detect_package_manager $packs_dir $app_dir)
+  local result_json
+  result_json=$(detect_package_manager "$packs_dir" "$app_dir")
   echo "$log_prefix Using version pack: $result_json" >> ${versionish_log}
-  local pack_dirname=$(echo $result_json | jq -r '.pack_dirname')
+  local pack_dirname
+  pack_dirname=$(echo "$result_json" | jq -r '.pack_dirname')
   echo "$log_prefix Proceeding with version pack: $pack_dirname" >> ${versionish_log}
-  local file=$(echo $result_json | jq -r '.file')
+  local file
+  file=$(echo "$result_json" | jq -r '.file')
   echo "$log_prefix Trying to extract version number from file: $file" >> ${versionish_log}
 
   # local config=$(read_config_json $versionish_dir/config.json "Java")
@@ -189,25 +197,27 @@ run_main() {
   # local input_type=$(echo $config | jq -r '.input.type')
   # local input_command=$(echo $config | jq -r '.input.command')
 
-  local pack_dir="$packs_dir/$pack_dirname"
-  local raw_version_number=$(extract_version_number $pack_dir $file)
+  local pack_dir
+  pack_dir="$packs_dir/$pack_dirname"
+  local raw_version_number
+  raw_version_number=$(extract_version_number "$pack_dir" "$file")
   echo "$log_prefix got raw version number: $raw_version_number" >> ${versionish_log}
-  local semver=$(convert_version_number $pack_dir $raw_version_number)
+  local semver
+  semver=$(convert_version_number "$pack_dir" "$raw_version_number")
   echo "$log_prefix converted to semantic version number: $semver" >> ${versionish_log}
 
-  echo $semver
+  echo "$semver"
 
   popd > /dev/null
 
   return 0
 }
 
-# do not automgically execute main method when sourced for testing
+# do not automagically execute main method when sourced for testing
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]
 then
-  run_main
-  if [ $? -gt 0 ]
-  then
+  if ! run_main "$@"; then
+    echo "Running versionish failed with exit code: $?" >> ${versionish_log}
     exit 1
   fi
 fi

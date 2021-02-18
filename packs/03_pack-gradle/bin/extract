@@ -11,10 +11,10 @@ gradle_wrapper() {
   fi
 }
 
-if [[ ${1+x} == "" ]]; then
+if [[ "$1" == "" ]]; then
   echo "version file name was not be given"
   exit 1
 fi
 
-gradle_wrapper $1
+gradle_wrapper "$1"
 exit 0

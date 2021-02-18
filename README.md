@@ -1,5 +1,7 @@
 # versionish
 
+[![Build Status](https://travis-ci.com/ajdergute/versionish.svg?branch=main)](https://travis-ci.com/ajdergute/versionish)
+
 Versionish is a tool which should help to extract version information out various package managers.
 This version information could then be used in any build pipeline for tagging, pinning, releasing or any other task which needs a version.
 

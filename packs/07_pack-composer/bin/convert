@@ -4,18 +4,18 @@ convert_version() {
   local version="$1"
 
   if [[ $version == v* ]]; then
-    echo ${version#v}
+    echo "${version#v}"
     exit 0
   else
-    echo $version
+    echo "$version"
     exit 0
   fi
 }
 
-if [[ ${1+x} == "" ]]; then
+if [[ "$1" == "" ]]; then
   echo "version number missing"
   exit 1
 fi
 
-convert_version $1
+convert_version "$1"
 exit 1
