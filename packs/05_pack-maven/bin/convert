@@ -4,13 +4,13 @@ convert_version() {
   local version="$1"
 
   if [[ "$version" == *.*.*-SNAPSHOT ]]; then
-    echo $version | cut -d'-' -f 1
+    echo "$version" | cut -d'-' -f 1
     exit 0
   elif [[ "$version" != *.*.* ]]; then
     echo "'$version' is not a valid semantic version, aborting"
     exit 2
   else
-    echo $version
+    echo "$version"
     exit 0
   fi
 }
@@ -20,5 +20,5 @@ if [[ ${1+x} == "" ]]; then
   exit 1
 fi
 
-convert_version $1
+convert_version "$1"
 exit 1

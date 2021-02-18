@@ -5,7 +5,7 @@ if test -f "go.mod" || #go modules
    test -f "Godeps/Godeps.json" || # godeps
    test -f "vendor/vendor.json" || # govendor
    test -f "glide.yaml" || # glide
-   (test -d "src" && test -n "$(find "src" -mindepth 2 -type f -name '*.go' | sed 1q)") # gb
+   { test -d "src" && test -n "$(find "src" -mindepth 2 -type f -name '*.go' | sed 1q)"; } # gb
 then
   echo Go
 else

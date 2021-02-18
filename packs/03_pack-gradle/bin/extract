@@ -16,5 +16,5 @@ if [[ ${1+x} == "" ]]; then
   exit 1
 fi
 
-gradle_wrapper $1
+gradle_wrapper "$1"
 exit 0
